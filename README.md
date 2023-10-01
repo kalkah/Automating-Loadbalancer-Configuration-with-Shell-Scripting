@@ -70,14 +70,112 @@ The permission of the file was chnaged with the command below to make it executa
 
 The script was run using the command below:
 
-On webserver1:     **` ./apache-install.sh 52.90.198.4`**
+On webserver1:     **` ./apache-install.sh 18.207.225.228`**
 
 <img width="442" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/68c560bd-e5ac-4727-b8d7-fad06d70403b">
 
-On webserver2:     **` ./apache-install.sh 54.175.221.171`**
+On webserver2:     **` ./apache-install.sh 44.211.251.98`**
 
 <img width="592" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/d85034cd-d76f-4e17-b344-76fd2e423c8f">
 
 ## Automate the Deployment of nginx as Load Balancer using Shell Script
 
+EC2 instance running Ubuntu 22.04 was launched and accessed via the git bash. Port 80 was opened to allow all incoming traffic.
 
+<img width="950" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/5fdd9c9f-d885-4bb5-87f2-7a4b712e3073">
+
+<img width="630" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/ab977b14-9c85-4f16-95af-c02c541d65d1">
+
+nginix-install.sh was opened with the command below
+
+**`sudo nano nginx-install.sh`**
+
+The code below was inserted into the nginx-install.sh
+
+```
+
+#!/bin/bash
+
+######################################################################################################################
+##### This automates the configuration of Nginx to act as a load balancer
+##### Usage: The script is called with 3 command line arguments. The public IP of the EC2 instance where Nginx is installed
+##### the webserver urls for which the load balancer distributes traffic. An example of how to call the script is shown below:
+##### ./configure_nginx_loadbalancer.sh PUBLIC_IP Webserver-1 Webserver-2
+#####  ./configure_nginx_loadbalancer.sh 127.0.0.1 192.2.4.6:8000  192.32.5.8:8000
+############################################################################################################# 
+
+PUBLIC_IP=$1
+firstWebserver=$2
+secondWebserver=$3
+
+[ -z "${PUBLIC_IP}" ] && echo "Please pass the Public IP of your EC2 instance as the argument to the script" && exit 1
+
+[ -z "${firstWebserver}" ] && echo "Please pass the Public IP together with its port number in this format: 127.0.0.1:8000 as the second argument to the script" && exit 1
+
+[ -z "${secondWebserver}" ] && echo "Please pass the Public IP together with its port number in this format: 127.0.0.1:8000 as the third argument to the script" && exit 1
+
+set -x # debug mode
+set -e # exit the script if there is an error
+set -o pipefail # exit the script when there is a pipe failure
+
+
+sudo apt update -y && sudo apt install nginx -y
+sudo systemctl status nginx
+
+if [[ $? -eq 0 ]]; then
+    sudo touch /etc/nginx/conf.d/loadbalancer.conf
+
+    sudo chmod 777 /etc/nginx/conf.d/loadbalancer.conf
+    sudo chmod 777 -R /etc/nginx/
+
+    
+    echo " upstream backend_servers {
+
+            # your are to replace the public IP and Port to that of your webservers
+            server  "${firstWebserver}"; # public IP and port for webserser 1
+            server "${secondWebserver}"; # public IP and port for webserver 2
+
+            }
+
+           server {
+            listen 80;
+            server_name "${PUBLIC_IP}";
+
+            location / {
+                proxy_pass http://backend_servers;   
+            }
+    } " > /etc/nginx/conf.d/loadbalancer.conf
+fi
+
+sudo nginx -t
+
+sudo systemctl restart nginx
+
+```
+
+The permission of the file was chnaged with the command below to make it executable
+
+**`    sudo chmod +x nginx-install.sh`**
+
+The script was run using the command below:
+
+**` ./nginx-install.sh 54.163.55.244 18.207.225.228:8000 44.211.251.98:8000`**    `(./nginx-install.sh PUBLIC_IP nginxloadbalancer Webserver-1 Webserver-2)`
+
+The scripts run successfully
+
+<img width="689" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/b67672b7-5d61-476a-b002-8a90fe2f3935">
+
+The screnshots below shows that the setup was succesful
+
+screenshot for Webserver-1 
+
+<img width="960" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/0cd49c82-59dd-478c-8fbf-5765c654aec1">
+
+
+screenshot for Webserver-2
+
+<img width="960" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/b6a11006-8371-4566-bdad-78aa879af07f">
+
+
+screenshot for nginx Load Balancer 
+<img width="959" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/b4e9984c-3b1e-4fc0-825a-4f92e7dfb758">
