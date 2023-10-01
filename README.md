@@ -9,8 +9,10 @@ TWo EC2 instances running Ubuntu 20.04 were launched and accessed via the git ba
 
 <img width="944" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/4b577038-4f21-4d67-97ea-1ca8bfd68c09">
 
-<img width="592" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/70c7db30-f3c1-4c6a-b4d7-44ac10e7ae12">
-<img width="455" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/1fe71ac1-f56b-4fde-9b44-914520ae1a2e">
+<img width="572" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/5a39785a-b2a7-4f58-940b-074faf535ee4">
+
+<img width="568" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/f8559596-a7c3-40bd-ba9c-a84ee5484fa4">
+
 
 Port 8000 was opened on the two instances to allow traffic from anywhere
 
@@ -163,7 +165,8 @@ The script was run using the command below:
 
 The scripts run successfully
 
-<img width="689" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/b67672b7-5d61-476a-b002-8a90fe2f3935">
+<img width="688" alt="image" src="https://github.com/kalkah/project-6/assets/95209274/709ad3f4-85d4-40ab-bc5a-70874cb3b4b5">
+
 
 The screnshots below shows that the setup was succesful
 
