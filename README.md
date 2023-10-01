@@ -1,4 +1,5 @@
-# project-6
+# Project-6: Automating Loadbalancer Configuration with Shell Scripting
+
 # Automating Loadbalancer Configuration with Shell Scripting
 
 The aim of this project is automation of load balancer configuration with shell scripting, this reduce manual effort.
